@@ -7,11 +7,13 @@ import LottieView from "lottie-react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputField } from "@/components/ui/input";
+import { useRouter } from "expo-router";
 
 function Login() {
   const [isInvalid, setIsInvalid] = useState(false);
   const [email, setEmail] = useState("");
   const [passWd, setpassWd] = useState("");
+  const router = useRouter();
 
   const handleSubmit = () => {
     if (passWd.length < 6) {
@@ -59,6 +61,7 @@ function Login() {
             <Button
               className="bg-[#4E7456] rounded-full mt-8 w-full h-16"
               size={"xl"}
+              onPress={() => router.push("/(tabs)/home")}
             >
               <ButtonText className="color-[#FCFFE0] font-p600 text-2xl">
                 Sign In
