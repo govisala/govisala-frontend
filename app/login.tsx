@@ -34,13 +34,16 @@ function Login() {
         <VStack>
           <Center>
             <Text className="text-4xl font-p600 mt-8 p-1">Sign In</Text>
-            <Input className="bg-[#FCFFE0] rounded-full mt-12 h-16" size={"xl"}>
+            <Input
+              className="bg-[#FCFFE0] rounded-full mt-12 h-16 text-[#75A47F]"
+              size={"xl"}
+            >
               <InputField
                 type="text"
                 placeholder="Email"
                 value={email}
                 onChangeText={(text) => setEmail(text)}
-                className="font-p400"
+                className="font-p400 text-[#354040]"
               />
             </Input>
             <Input className="bg-[#FCFFE0] rounded-full mt-4 h-16" size={"xl"}>
