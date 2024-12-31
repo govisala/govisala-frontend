@@ -1,27 +1,21 @@
 import { Box } from "@/components/ui/box";
-import { Text } from "@/components/ui/text";
+import { Center } from "@/components/ui/center";
 import { VStack } from "@/components/ui/vstack";
-import { AlertCircleIcon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Input, InputField } from "@/components/ui/input";
-import {
-  FormControl,
-  FormControlError,
-  FormControlLabel,
-  FormControlLabelText,
-  FormControlHelperText,
-  FormControlHelper,
-  FormControlErrorIcon,
-  FormControlErrorText,
-} from "@/components/ui/form-control";
+import LottieView from "lottie-react-native";
 import React, { useState } from "react";
-import { Link } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Input, InputField } from "@/components/ui/input";
 
-function Register() {
+function Login() {
   const [isInvalid, setIsInvalid] = useState(false);
   const [email, setEmail] = useState("");
+  const [Name, setName] = useState("");
+  const [ContactNumber, setContactNumber] = useState("");
+  const [Address, setAddress] = useState("");
+  const [ConfirmPwd, setConfirmPwd] = useState("");
   const [passWd, setpassWd] = useState("");
-  const [passWdConf, setpassWdConf] = useState("");
 
   const handleSubmit = () => {
     if (passWd.length < 6) {
@@ -31,84 +25,96 @@ function Register() {
     }
   };
   return (
-    <Box className="bg-slate-200 h-full m-6 rounded-3xl items-center pt-8">
-      <Text className="font-p500 text-3xl mb-8">Register</Text>
-      <VStack className="w-full bg-blue-100 max-w-[400px] rounded-xl border border-background-200 p-4">
-        <FormControl isInvalid={isInvalid} size="lg" isRequired={true}>
-          <FormControlLabel>
-            <FormControlLabelText className="font-p500">
-              Email
-            </FormControlLabelText>
-          </FormControlLabel>
-          <Input className="my-1 font-p500 rounded-full" size={"sm"}>
-            <InputField
-              type="text"
-              placeholder="email"
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              className="font-p400"
-            />
-          </Input>
-          <FormControlLabel>
-            <FormControlLabelText className="font-p500">
-              Password
-            </FormControlLabelText>
-          </FormControlLabel>
-          <Input className="my-1 rounded-full" size={"sm"}>
-            <InputField
-              type="password"
-              placeholder="password"
-              value={passWd}
-              onChangeText={(text) => setpassWd(text)}
-              className="font-p400"
-            />
-          </Input>
-          <FormControlLabel>
-            <FormControlLabelText className="font-p500">
-              Confirm Password
-            </FormControlLabelText>
-          </FormControlLabel>
-          <Input className="my-1 rounded-full" size={"sm"}>
-            <InputField
-              type="password"
-              placeholder="confirm password"
-              value={passWdConf}
-              onChangeText={(text) => setpassWdConf(text)}
-              className="font-p400"
-            />
-          </Input>
-          <FormControlHelper>
-            <FormControlHelperText className="font-p400 text-sm">
-              Must be atleast 6 characters.
-            </FormControlHelperText>
-          </FormControlHelper>
-          <FormControlError>
-            <FormControlErrorIcon as={AlertCircleIcon} />
-            <FormControlErrorText className="font-p400 text-base">
-              Atleast 6 characters are required.
-            </FormControlErrorText>
-          </FormControlError>
-          <Button
-            className="w-fit self-center mt-4 font-p500"
-            size="sm"
-            onPress={handleSubmit}
-          >
-            <ButtonText className="font-p600">Register</ButtonText>
-          </Button>
-          <FormControlHelper className="self-center">
-            <FormControlHelperText className="font-p400 text-sm text-center">
-              If you don't have an account, please{" \n"}
-              <Link href="/login" asChild>
-                <Text className="text-blue-500 font-p400 text-sm">
-                  login from here.
-                </Text>
-              </Link>
-            </FormControlHelperText>
-          </FormControlHelper>
-        </FormControl>
-      </VStack>
-    </Box>
+    <SafeAreaView className="bg-[#FCFFE0]">
+      <Box className="flex w-full h-[180px] justify-center">
+        <LottieView
+          source={require("../assets/animation/ani1.json")}
+          autoPlay
+          loop
+          style={{ width: 200, height: 200 }}
+        />
+      </Box>
+      <Box className="bg-[#C0D85F] h-full rounded-t-[40px] px-4">
+        <VStack>
+          <Center>
+            <Text className="text-4xl font-p600 mt-8 p-1">Sign Up</Text>
+            <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
+              <InputField
+                type="text"
+                placeholder="Email address"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                className="font-p400"
+              />
+            </Input>
+            <Input className="bg-[#FCFFE0] rounded-full mt-4 h-16" size={"xl"}>
+              <InputField
+                type="text"
+                placeholder="Name"
+                value={Name}
+                onChangeText={(text) => setName(text)}
+                className="font-p400"
+              />
+            </Input>
+
+            <Input className="bg-[#FCFFE0] rounded-full mt-4 h-16" size={"xl"}>
+              <InputField
+                type="text"
+                placeholder="Contact number"
+                value={ContactNumber}
+                onChangeText={(text) => setContactNumber(text)}
+                className="font-p400"
+              />
+            </Input>
+
+            <Input className="bg-[#FCFFE0] rounded-full mt-4 h-16" size={"xl"}>
+              <InputField
+                type="text"
+                placeholder="Address"
+                value={Address}
+                onChangeText={(text) => setAddress(text)}
+                className="font-p400"
+              />
+            </Input>
+
+            <Input className="bg-[#FCFFE0] rounded-full mt-4 h-16" size={"xl"}>
+              <InputField
+                type="password"
+                placeholder="Password"
+                value={passWd}
+                onChangeText={(text) => setpassWd(text)}
+                className="font-p400"
+              />
+            </Input>
+
+            <Input className="bg-[#FCFFE0] rounded-full mt-4 h-16" size={"xl"}>
+              <InputField
+                type="password"
+                placeholder="Confirm Password"
+                value={ConfirmPwd}
+                onChangeText={(text) => setConfirmPwd(text)}
+                className="font-p400"
+              />
+            </Input>
+
+            <Button
+              className="bg-[#4E7456] rounded-full mt-8 w-full h-16"
+              size={"xl"}
+            >
+              <ButtonText className="color-[#FCFFE0] font-p600 text-2xl">
+                Sign Up
+              </ButtonText>
+            </Button>
+            <Text className="text-right mt-4 font-p500 text-[#4E7456]">
+              {" "}
+              Forgot password?
+            </Text>
+            <Text></Text>
+          </Center>
+        </VStack>
+      </Box>
+    </SafeAreaView>
   );
 }
 
-export default Register;
+export default Login;
