@@ -1,15 +1,12 @@
 import { Box } from "@/components/ui/box";
-import { Text } from "@/components/ui/text";
+import { Center } from "@/components/ui/center";
 import { VStack } from "@/components/ui/vstack";
+import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Input, InputField } from "@/components/ui/input";
-import {
-  FormControl,
-  FormControlLabel,
-  FormControlLabelText,
-} from "@/components/ui/form-control";
+import LottieView from "lottie-react-native";
 import React, { useState } from "react";
-import { Divider } from "@/components/ui/divider";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Input, InputField } from "@/components/ui/input";
 
 function Login() {
   const [isInvalid, setIsInvalid] = useState(false);
@@ -24,54 +21,48 @@ function Login() {
     }
   };
   return (
-    <Box className="bg-slate-200 h-full m-6 rounded-3xl items-center pt-8">
-      <Text className="font-p500 text-3xl mb-8">Login</Text>
-      <VStack className="w-full bg-blue-100 max-w-[400px] rounded-xl border border-background-200 p-4">
-        <FormControl isInvalid={isInvalid} size="lg" isRequired={true}>
-          <FormControlLabel>
-            <FormControlLabelText className="font-p500">
-              Email
-            </FormControlLabelText>
-          </FormControlLabel>
-          <Input className="my-1 font-p500 rounded-full" size={"sm"}>
-            <InputField
-              type="text"
-              placeholder="email"
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              className="font-p400"
-            />
-          </Input>
-          <FormControlLabel>
-            <FormControlLabelText className="font-p500">
-              Password
-            </FormControlLabelText>
-          </FormControlLabel>
-          <Input className="my-1 rounded-full" size={"sm"}>
-            <InputField
-              type="password"
-              placeholder="password"
-              value={passWd}
-              onChangeText={(text) => setpassWd(text)}
-              className="font-p400"
-            />
-          </Input>
-          <Button
-            className="w-fit self-center mt-4 font-p500"
-            size="sm"
-            onPress={handleSubmit}
-          >
-            <ButtonText className="font-p600">Login</ButtonText>
-          </Button>
-          <VStack className="mt-4 flex flex-row items-center justify-center">
-            <Divider className="w-32 bg-slate-500 mr-2" />
-            <Text className="font-p400">OR</Text>
-            <Divider className="w-32 bg-slate-500 ml-2" />
-          </VStack>
-          {/* -------------- Google sign in ------------ */}
-        </FormControl>
-      </VStack>
-    </Box>
+    <SafeAreaView className="bg-[#FCFFE0]">
+      <Box className="flex w-full h-[180px] justify-center">
+        <LottieView
+          source={require("../assets/animation/ani1.json")}
+          autoPlay
+          loop
+          style={{ width: 200, height: 200 }}
+        />
+      </Box>
+      <Box className="bg-[#C0D85F] h-full rounded-t-[40px] p-2">
+        <VStack>
+          <Center>
+            <Text className="text-4xl font-p600 mt-4">Sign In</Text>
+            <Input className="bg-[#FCFFE0] rounded-full mt-8" size={"xl"}>
+              <InputField
+                type="text"
+                placeholder="Email"
+                value={passWd}
+                onChangeText={(text) => setpassWd(text)}
+                className="font-p400"
+              />
+            </Input>
+            <Input className="bg-[#FCFFE0] rounded-full mt-4" size={"xl"}>
+              <InputField
+                type="password"
+                placeholder="Password"
+                value={passWd}
+                onChangeText={(text) => setpassWd(text)}
+                className="font-p400"
+              />
+            </Input>
+            <Text className="text-left mt-4"> Remember me?</Text>
+            <Button className="bg-[#4E7456] rounded-full mt-8" size={"xl"}>
+              <ButtonText className="color-[#FCFFE0]">Sign In</ButtonText>
+            </Button>
+            <Text className="text-right mt-4"> Forgot password?</Text>
+
+            <Text></Text>
+          </Center>
+        </VStack>
+      </Box>
+    </SafeAreaView>
   );
 }
 
