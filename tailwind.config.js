@@ -1,5 +1,4 @@
 import gluestackPlugin from "@gluestack-ui/nativewind-utils/tailwind-plugin";
-import { platformSelect } from "nativewind/theme";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

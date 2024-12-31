@@ -36,11 +36,7 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            headerTitle: () => {
-              return (
-                <Text className="font-p500 text-xl">Welcome to GoviSala!</Text>
-              );
-            },
+            headerShown: false,
           }}
         />
         <Stack.Screen
