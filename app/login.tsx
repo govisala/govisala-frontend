@@ -30,20 +30,20 @@ function Login() {
           style={{ width: 200, height: 200 }}
         />
       </Box>
-      <Box className="bg-[#C0D85F] h-full rounded-t-[40px] p-2">
+      <Box className="bg-[#C0D85F] h-full rounded-t-[40px] px-4">
         <VStack>
           <Center>
-            <Text className="text-4xl font-p600 mt-4">Sign In</Text>
-            <Input className="bg-[#FCFFE0] rounded-full mt-8" size={"xl"}>
+            <Text className="text-4xl font-p600 mt-8 p-1">Sign In</Text>
+            <Input className="bg-[#FCFFE0] rounded-full mt-12 h-16" size={"xl"}>
               <InputField
                 type="text"
                 placeholder="Email"
-                value={passWd}
-                onChangeText={(text) => setpassWd(text)}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
                 className="font-p400"
               />
             </Input>
-            <Input className="bg-[#FCFFE0] rounded-full mt-4" size={"xl"}>
+            <Input className="bg-[#FCFFE0] rounded-full mt-4 h-16" size={"xl"}>
               <InputField
                 type="password"
                 placeholder="Password"
@@ -52,12 +52,19 @@ function Login() {
                 className="font-p400"
               />
             </Input>
-            <Text className="text-left mt-4"> Remember me?</Text>
-            <Button className="bg-[#4E7456] rounded-full mt-8" size={"xl"}>
-              <ButtonText className="color-[#FCFFE0]">Sign In</ButtonText>
-            </Button>
-            <Text className="text-right mt-4"> Forgot password?</Text>
 
+            <Button
+              className="bg-[#4E7456] rounded-full mt-8 w-full h-16"
+              size={"xl"}
+            >
+              <ButtonText className="color-[#FCFFE0] font-p600 text-2xl">
+                Sign In
+              </ButtonText>
+            </Button>
+            <Text className="text-right mt-4 font-p500 text-[#4E7456]">
+              {" "}
+              Forgot password?
+            </Text>
             <Text></Text>
           </Center>
         </VStack>

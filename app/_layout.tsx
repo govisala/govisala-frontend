@@ -3,6 +3,7 @@ import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { StatusBar } from "expo-status-bar";
 import {
+  Poppins_300Light,
   Poppins_400Regular,
   Poppins_500Medium,
   Poppins_600SemiBold,
@@ -10,15 +11,15 @@ import {
 } from "@expo-google-fonts/poppins";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { Text } from "@/components/ui/text";
+import { Platform } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    p400: Poppins_400Regular,
-    p500: Poppins_500Medium,
-    p600: Poppins_600SemiBold,
+    p400: Platform.OS == "android" ? Poppins_300Light : Poppins_400Regular,
+    p500: Platform.OS == "android" ? Poppins_400Regular : Poppins_500Medium,
+    p600: Platform.OS == "android" ? Poppins_500Medium : Poppins_600SemiBold,
   });
 
   useEffect(() => {
@@ -42,19 +43,13 @@ export default function RootLayout() {
         <Stack.Screen
           name="login"
           options={{
-            headerTitle: () => {
-              return <Text className="font-p500 text-xl">Login</Text>;
-            },
-            headerBackVisible: false,
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="register"
           options={{
-            headerTitle: () => {
-              return <Text className="font-p500 text-xl">Register</Text>;
-            },
-            headerBackVisible: false,
+            headerShown: false,
           }}
         />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
