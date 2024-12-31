@@ -105,10 +105,13 @@ function Login() {
                 Sign Up
               </ButtonText>
             </Button>
-            <Text className="text-right mt-4 font-p500 text-[#4E7456]">
-              {" "}
-              Forgot password?
-            </Text>
+            <Box className="flex flex-row items-center justify-center">
+              <Box className="h-[2px] bg-[#354040] w-32 mr-1" />
+              <Text className="text-center my-4 font-p400 text-sm text-[#354040]">
+                OR
+              </Text>
+              <Box className="h-[2px] bg-[#354040] w-32 ml-1" />
+            </Box>
             <Text></Text>
           </Center>
         </VStack>
