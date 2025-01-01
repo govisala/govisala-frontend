@@ -50,7 +50,7 @@ function RootPage() {
           </Button>
         </Link>
       </Box>
-      <Box className="w-[700px] h-[700px] bg-[#C0D85F] absolute -z-50 rotate-[75deg] top-[460px]" />
+      <Box className="w-[800px] h-[800px] bg-[#C0D85F] absolute -z-50 rotate-[75deg] top-[440px]" />
     </SafeAreaView>
   );
 }
