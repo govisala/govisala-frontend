@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputField } from "@/components/ui/input";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface User {
   user_mail: string;
@@ -30,8 +31,14 @@ function Login() {
 
     axios
       .post("http://localhost:3210/auth/login", user)
-      .then((res) => {
+      .then(async (res) => {
         if (res.status == 200) {
+          try {
+            const jsonValue = JSON.stringify(res.data.userData);
+            await AsyncStorage.setItem("userData", jsonValue);
+          } catch (e) {
+            console.log(e);
+          }
           router.push("/(tabs)/home");
         } else {
           console.log(res.data.message);
