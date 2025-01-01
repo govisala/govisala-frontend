@@ -8,6 +8,12 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputField } from "@/components/ui/input";
 import { useRouter } from "expo-router";
+import axios from "axios";
+
+interface User {
+  user_mail: string;
+  user_pwd: string;
+}
 
 function Login() {
   const [isInvalid, setIsInvalid] = useState(false);
@@ -16,11 +22,24 @@ function Login() {
   const router = useRouter();
 
   const handleSubmit = () => {
-    if (passWd.length < 6) {
-      setIsInvalid(true);
-    } else {
-      setIsInvalid(false);
-    }
+    const user: User = {
+      user_mail: email,
+      user_pwd: passWd,
+    };
+    console.log(user);
+
+    axios
+      .post("http://localhost:3210/auth/login", user)
+      .then((res) => {
+        if (res.status == 200) {
+          router.push("/(tabs)/home");
+        } else {
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.data.message);
+      });
   };
   return (
     <SafeAreaView className="bg-[#FCFFE0]">
@@ -61,7 +80,7 @@ function Login() {
             <Button
               className="bg-[#4E7456] rounded-full mt-8 w-full h-16"
               size={"xl"}
-              onPress={() => router.push("/(tabs)/home")}
+              onPress={handleSubmit}
             >
               <ButtonText className="color-[#FCFFE0] font-p600 text-2xl">
                 Sign In
