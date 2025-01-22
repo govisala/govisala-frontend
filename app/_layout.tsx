@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import React from "react";
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { StatusBar } from "expo-status-bar";
@@ -33,7 +34,7 @@ export default function RootLayout() {
   }
   return (
     <GluestackUIProvider>
-      <Stack>
+      <Stack initialRouteName="index">
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="index"

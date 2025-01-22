@@ -30,22 +30,25 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="home"
       tabBar={() => (
         <Box className="flex mb-8 mx-4 bg-[#C0D85F] h-16 rounded-full justify-center items-center">
-          <HStack className="flex items-center w-full justify-around">
+          <HStack className="flex items-center w-full justify-evenly">
             <TouchableOpacity onPress={() => router.push("/home")}>
               <Feather name="home" size={30} color={"#4E7456"} />
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/posts")}>
+              <Feather name="grid" size={30} color={"#4E7456"} />
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push("/add")}>
               <Box className="w-20 h-20 bg-[#4E7456] items-center justify-center rounded-full">
-                {userRole === "SELLER" ? (
-                  <Feather name="plus" size={64} color="#FCFFE0" />
-                ) : (
-                  <AntDesign name="star" size={40} color="#FCFFE0" />
-                )}
+                <Feather name="plus" size={64} color="#FCFFE0" />
               </Box>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/user")}>
+            <TouchableOpacity onPress={() => router.push("/chats")}>
+              <Feather name="message-circle" size={30} color={"#4E7456"} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/profile")}>
               <Feather name="user" size={30} color={"#4E7456"} />
             </TouchableOpacity>
           </HStack>
@@ -53,8 +56,10 @@ export default function TabLayout() {
       )}
     >
       <Tabs.Screen name="home" options={{ headerShown: false }} />
-      <Tabs.Screen name="user" options={{ headerShown: false }} />
+      <Tabs.Screen name="posts" options={{ headerShown: false }} />
       <Tabs.Screen name="add" options={{ headerShown: false }} />
+      <Tabs.Screen name="chats" options={{ headerShown: false }} />
+      <Tabs.Screen name="profile" options={{ headerShown: false }} />
     </Tabs>
   );
 }

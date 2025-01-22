@@ -10,44 +10,65 @@ import { Input, InputField } from "@/components/ui/input";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { z } from "zod";
+import { Alert, AlertIcon, AlertText } from "@/components/ui/alert";
+import { Pressable } from "react-native";
 
-interface User {
-  user_mail: string;
-  user_pwd: string;
-}
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
+// interface User {
+//   user_mail: string;
+//   user_pwd: string;
+// }
+
+const User = z.object({
+  user_mail: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Invalid email address" }),
+  user_pwd: z
+    .string({ required_error: "Password is required" })
+    .min(8, { message: "Password must be at least 8 characters long" }),
+});
+
+const myError = new z.ZodError([]);
 
 function Login() {
-  const [isInvalid, setIsInvalid] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errors, setErrors] = useState<z.ZodIssue[]>([]);
   const [email, setEmail] = useState("");
   const [passWd, setpassWd] = useState("");
   const router = useRouter();
 
   const handleSubmit = () => {
-    const user: User = {
-      user_mail: email,
-      user_pwd: passWd,
-    };
-    console.log(user);
+    try {
+      User.parse({ user_mail: email, user_pwd: passWd });
 
-    axios
-      .post("http://localhost:3210/auth/login", user)
-      .then(async (res) => {
-        if (res.status == 200) {
-          try {
-            const jsonValue = JSON.stringify(res.data.userData);
-            await AsyncStorage.setItem("userData", jsonValue);
-          } catch (e) {
-            console.log(e);
+      axios
+        .post("http://localhost:3210/auth/login", User)
+        .then(async (res) => {
+          if (res.status == 200) {
+            try {
+              const jsonValue = JSON.stringify(res.data.userData);
+              await AsyncStorage.setItem("userData", jsonValue);
+            } catch (e) {
+              console.log(e);
+            }
+            router.push("/(tabs)/home");
+          } else {
+            console.log(res.data.message);
           }
-          router.push("/(tabs)/home");
-        } else {
-          console.log(res.data.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err.data.message);
-      });
+        })
+        .catch((err) => {
+          console.log(err.data.message);
+        });
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        setErrors(error.issues);
+        console.log(errors);
+      }
+    }
   };
+
   return (
     <SafeAreaView className="bg-[#FCFFE0]">
       <Box className="flex w-full h-[180px] justify-center">
@@ -93,13 +114,22 @@ function Login() {
                 Sign In
               </ButtonText>
             </Button>
-            <Text className="text-right mt-4 font-p500 text-[#4E7456]">
-              {" "}
-              Forgot password?
-            </Text>
-            <Text></Text>
+            <Pressable onPress={() => router.push("/(tabs)/home")}>
+              <Text className="text-right mt-4 font-p500 text-[#4E7456]">
+                {" "}
+                Forgot password?
+              </Text>
+            </Pressable>
           </Center>
         </VStack>
+        {errors.length > 0 && (
+          <Alert className="bg-[#F8D7DA] mt-4">
+            <MaterialIcons name="error-outline" size={24} color="#D8000C" />
+            <AlertText className="text-[#D8000C]">
+              {errors[0].message}
+            </AlertText>
+          </Alert>
+        )}
       </Box>
     </SafeAreaView>
   );
