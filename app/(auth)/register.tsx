@@ -7,6 +7,9 @@ import LottieView from "lottie-react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputField } from "@/components/ui/input";
+import { Pressable, ScrollView } from "react-native";
+import { useRouter } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 function Login() {
   const [isInvalid, setIsInvalid] = useState(false);
@@ -17,6 +20,8 @@ function Login() {
   const [ConfirmPwd, setConfirmPwd] = useState("");
   const [passWd, setpassWd] = useState("");
 
+  const router = useRouter();
+
   const handleSubmit = () => {
     if (passWd.length < 6) {
       setIsInvalid(true);
@@ -26,16 +31,24 @@ function Login() {
   };
   return (
     <SafeAreaView className="bg-[#FCFFE0]">
+      <Pressable onPress={() => router.back()} className="p-4">
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </Pressable>
       <Box className="flex w-full h-[180px] justify-center">
         <LottieView
-          source={require("../assets/animation/ani1.json")}
+          source={require("../../assets/animation/ani1.json")}
           autoPlay
           loop
           style={{ width: 200, height: 200 }}
         />
       </Box>
       <Box className="bg-[#C0D85F] h-full rounded-t-[40px] px-4">
-        <VStack>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
           <Center>
             <Text className="text-4xl font-p600 mt-8 p-1">Sign Up</Text>
             <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
@@ -112,9 +125,11 @@ function Login() {
               </Text>
               <Box className="h-[2px] bg-[#354040] w-32 ml-1" />
             </Box>
-            <Text></Text>
+            <Pressable onPress={() => router.push("/login")}>
+              <Text className="font-p500">Sign In</Text>
+            </Pressable>
           </Center>
-        </VStack>
+        </ScrollView>
       </Box>
     </SafeAreaView>
   );

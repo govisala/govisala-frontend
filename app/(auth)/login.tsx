@@ -14,12 +14,7 @@ import { z } from "zod";
 import { Alert, AlertIcon, AlertText } from "@/components/ui/alert";
 import { Pressable } from "react-native";
 
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-
-// interface User {
-//   user_mail: string;
-//   user_pwd: string;
-// }
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const User = z.object({
   user_mail: z
@@ -30,50 +25,43 @@ const User = z.object({
     .min(8, { message: "Password must be at least 8 characters long" }),
 });
 
-const myError = new z.ZodError([]);
-
 function Login() {
-  const [isError, setIsError] = useState(false);
-  const [errors, setErrors] = useState<z.ZodIssue[]>([]);
   const [email, setEmail] = useState("");
   const [passWd, setpassWd] = useState("");
   const router = useRouter();
 
   const handleSubmit = () => {
     try {
-      User.parse({ user_mail: email, user_pwd: passWd });
-
+      let user = User.parse({ user_mail: email, user_pwd: passWd });
       axios
-        .post("http://localhost:3210/auth/login", User)
+        .post("http://localhost:3210/auth/login", user)
         .then(async (res) => {
           if (res.status == 200) {
             try {
               const jsonValue = JSON.stringify(res.data.userData);
               await AsyncStorage.setItem("userData", jsonValue);
-            } catch (e) {
+            } catch (e: any) {
               console.log(e);
             }
             router.push("/(tabs)/home");
-          } else {
-            console.log(res.data.message);
           }
         })
-        .catch((err) => {
-          console.log(err.data.message);
+        .catch((err: any) => {
+          console.log(err.message);
         });
     } catch (error: any) {
-      if (error instanceof z.ZodError) {
-        setErrors(error.issues);
-        console.log(errors);
-      }
+      console.log(error);
     }
   };
 
   return (
     <SafeAreaView className="bg-[#FCFFE0]">
+      <Pressable onPress={() => router.back()} className="p-4">
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </Pressable>
       <Box className="flex w-full h-[180px] justify-center">
         <LottieView
-          source={require("../assets/animation/ani1.json")}
+          source={require("../../assets/animation/ani1.json")}
           autoPlay
           loop
           style={{ width: 200, height: 200 }}
@@ -120,16 +108,18 @@ function Login() {
                 Forgot password?
               </Text>
             </Pressable>
+            <Box className="flex flex-row items-center justify-center">
+              <Box className="h-[2px] bg-[#354040] w-32 mr-1" />
+              <Text className="text-center my-4 font-p400 text-sm text-[#354040]">
+                OR
+              </Text>
+              <Box className="h-[2px] bg-[#354040] w-32 ml-1" />
+            </Box>
+            <Pressable onPress={() => router.push("/register")}>
+              <Text className="font-p500">Sign Up</Text>
+            </Pressable>
           </Center>
         </VStack>
-        {errors.length > 0 && (
-          <Alert className="bg-[#F8D7DA] mt-4">
-            <MaterialIcons name="error-outline" size={24} color="#D8000C" />
-            <AlertText className="text-[#D8000C]">
-              {errors[0].message}
-            </AlertText>
-          </Alert>
-        )}
       </Box>
     </SafeAreaView>
   );

@@ -3,7 +3,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import React from "react";
+import React, { useEffect } from "react";
 
 import LottieView from "lottie-react-native";
 
@@ -21,7 +21,7 @@ function RootPage() {
           <Text className="font-p600 text-5xl py-2 -mb-10">GoviSala!</Text>
           <Box className="flex w-full h-[300px] justify-center items-center ml-2 mb-36">
             <LottieView
-              source={require("../assets/animation/ani1.json")}
+              source={require("../../assets/animation/ani1.json")}
               autoPlay
               loop
               style={{ flex: 1, width: 300, height: 300 }}

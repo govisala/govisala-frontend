@@ -7,8 +7,26 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HStack } from "@/components/ui/hstack";
 import { InputField, Input } from "@/components/ui/input";
 
+import img1 from "@/assets/images/onions.jpg";
+
 import Feather from "@expo/vector-icons/Feather";
-import { TouchableOpacity } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
+
+const items = [
+  { name: "Item 1", price: "10000", location: "Hambantota" },
+  { name: "Item 2", price: "20000", location: "Colombo" },
+  { name: "Item 3", price: "30000", location: "Galle" },
+  { name: "Item 4", price: "40000", location: "Matara" },
+  { name: "Item 5", price: "50000", location: "Kandy" },
+
+  { name: "Item 6", price: "60000", location: "Jaffna" },
+  { name: "Item 7", price: "70000", location: "Anuradhapura" },
+];
 
 const Home = () => {
   const getData = async () => {
@@ -30,8 +48,11 @@ const Home = () => {
   return (
     <SafeAreaView>
       <Box>
-        <Center className="flex items-center justify-center">
-          <HStack className="flex items-center justify-center">
+        <Center>
+          <HStack className="flex-col">
+            <Text className="text-3xl font-p600 text-left text-[#354040] ml-4">
+              Welcome Buyer A,
+            </Text>
             <Box className="h-20 flex flex-row items-center justify-between rounded-full mx-4">
               <Input
                 variant="rounded"
@@ -39,10 +60,10 @@ const Home = () => {
                 isDisabled={false}
                 isInvalid={false}
                 isReadOnly={false}
-                className="flex-[80%] mx-4 bg-[#C0D85F] rounded-full"
+                className="flex-[80%] bg-[#C0D85F] rounded-full mr-2"
               >
                 <InputField
-                  placeholder="Type to search..."
+                  placeholder="Looking for something?"
                   className="font-p400 "
                 />
                 <Feather
@@ -56,6 +77,110 @@ const Home = () => {
                 <Feather name="bell" size={30} color="#4E7456" />
               </TouchableOpacity>
             </Box>
+            <ScrollView className="flex flex-col ml-4">
+              <Box className="flex flex-col ">
+                <HStack className="flex flex-row items-center">
+                  <Text className="text-md font-p400 text-left text-[#FCFFE0] bg-[#4E7456] p-2 rounded-full mr-4">
+                    Most Popular
+                  </Text>
+                </HStack>
+                <FlatList
+                  data={items}
+                  renderItem={({ item }) => (
+                    <ImageBackground
+                      source={img1}
+                      className="flex flex-col w-64 h-64 mr-2 rounded-full"
+                      imageStyle={{ borderRadius: 12 }}
+                    >
+                      <Box className="flex-[60%] bg-black opacity-40 rounded-t-xl"></Box>
+                      <Box className="flex-[40%] flex-col justify-end bg-[#F5DAD2] rounded-b-xl p-2">
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          {item.name}
+                        </Text>
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          Location: {item.location}
+                        </Text>
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          LKR {item.price}
+                        </Text>
+                      </Box>
+                    </ImageBackground>
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                  horizontal={true}
+                  scrollEnabled={true}
+                  className="w-full h-64 mt-2"
+                />
+              </Box>
+              <Box className="flex flex-col mt-4">
+                <HStack className="flex flex-row items-center">
+                  <Text className="text-md font-p400 text-left text-[#FCFFE0] bg-[#4E7456] p-2 rounded-full mr-4">
+                    Trending
+                  </Text>
+                </HStack>
+                <FlatList
+                  data={items}
+                  renderItem={({ item }) => (
+                    <ImageBackground
+                      source={img1}
+                      className="flex flex-col w-64 h-64 mr-2 rounded-full"
+                      imageStyle={{ borderRadius: 12 }}
+                    >
+                      <Box className="flex-[60%] bg-black opacity-40 rounded-t-xl"></Box>
+                      <Box className="flex-[40%] flex-col justify-end bg-[#F5DAD2] rounded-b-xl p-2">
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          {item.name}
+                        </Text>
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          Location: {item.location}
+                        </Text>
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          LKR {item.price}
+                        </Text>
+                      </Box>
+                    </ImageBackground>
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                  horizontal={true}
+                  scrollEnabled={true}
+                  className="w-full h-64 mt-2"
+                />
+              </Box>
+              <Box className="flex flex-col mt-4">
+                <HStack className="flex flex-row items-center">
+                  <Text className="text-md font-p400 text-left text-[#FCFFE0] bg-[#4E7456] p-2 rounded-full mr-4">
+                    Recently Added
+                  </Text>
+                </HStack>
+                <FlatList
+                  data={items}
+                  renderItem={({ item }) => (
+                    <ImageBackground
+                      source={img1}
+                      className="flex flex-col w-64 h-64 mr-2 rounded-full"
+                      imageStyle={{ borderRadius: 12 }}
+                    >
+                      <Box className="flex-[60%] bg-black opacity-40 rounded-t-xl"></Box>
+                      <Box className="flex-[40%] flex-col justify-end bg-[#F5DAD2] rounded-b-xl p-2">
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          {item.name}
+                        </Text>
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          Location: {item.location}
+                        </Text>
+                        <Text className="text-lg font-p400 text-left text-[#354040]">
+                          LKR {item.price}
+                        </Text>
+                      </Box>
+                    </ImageBackground>
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                  horizontal={true}
+                  scrollEnabled={true}
+                  className="w-full h-64 mt-2"
+                />
+              </Box>
+            </ScrollView>
           </HStack>
         </Center>
       </Box>
