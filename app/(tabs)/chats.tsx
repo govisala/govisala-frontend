@@ -46,7 +46,9 @@ const chats = () => {
     <SafeAreaView>
       <Box>
         <Center className="flex items-center w-full px-2">
-          <Text className="text-center font-p600 text-3xl mb-4">Chats</Text>
+          <Text className="text-center font-p600 text-3xl mb-4 text-[#354040]">
+            Chats
+          </Text>
           <ScrollView>
             {messages.map((message) => (
               <TouchableOpacity key={message.id}>
@@ -56,9 +58,6 @@ const chats = () => {
                 >
                   <Box className="flex flex-row items-center">
                     <Box className="mr-4">
-                      {/* Avatar */}
-                      {/* <Box className="w-12 h-12 bg-gray-200 rounded-full" />
-                       */}
                       <Image
                         source={{
                           uri: `https://ui-avatars.com/api/?name=${message.name}&background=random&size=50`,
@@ -70,7 +69,9 @@ const chats = () => {
                       <Text className="font-p600">{message.name}</Text>
                       <Text
                         className={
-                          message.unread > 0 ? "text-gray-900" : "text-gray-500"
+                          message.unread > 0
+                            ? "text-gray-900 font-p500"
+                            : "text-gray-500 font-p400"
                         }
                       >
                         {message.message}

@@ -100,7 +100,9 @@ const Posts = () => {
     <SafeAreaView className="h-full mx-2">
       <Box>
         <Center className="flex items-center justify-center h-full">
-          <Text className="text-center font-p600 text-3xl">My Requests</Text>
+          <Text className="text-center font-p600 text-3xl text-[#354040]">
+            My Requests
+          </Text>
           <ScrollView className="flex flex-col mt-2">
             {posts.map((post, index) => (
               <Box
