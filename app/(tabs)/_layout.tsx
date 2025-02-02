@@ -4,13 +4,17 @@ import { Text } from "@/components/ui/text";
 import { Tabs } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { set } from "zod";
+import AddModal from "@/components/AddBtnModal";
 
 export default function TabLayout() {
   const [userRole, setUserRole] = useState("");
+  const [currentPage, setCurrentPage] = useState("home");
+  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
   const getData = async () => {
     try {
@@ -31,35 +35,85 @@ export default function TabLayout() {
   return (
     <Tabs
       initialRouteName="home"
+      screenOptions={{
+        headerShown: false,
+      }}
       tabBar={() => (
-        <Box className="flex mb-8 mx-4 bg-[#C0D85F] h-16 rounded-full justify-center items-center">
+        <Box className="absolute bottom-8 right-0 left-0 flex mx-4 bg-[#C0D85F] h-16 rounded-full justify-center items-center">
           <HStack className="flex items-center w-full justify-evenly">
-            <TouchableOpacity onPress={() => router.push("/home")}>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/home");
+                setCurrentPage("home");
+              }}
+              className={
+                currentPage === "home" ? "bg-[#FCFFE0] rounded-full p-2" : "p-2"
+              }
+            >
               <Feather name="home" size={30} color={"#4E7456"} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/posts")}>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/posts");
+                setCurrentPage("posts");
+              }}
+              className={
+                currentPage === "posts"
+                  ? "bg-[#FCFFE0] rounded-full p-2"
+                  : "p-2"
+              }
+            >
               <Feather name="grid" size={30} color={"#4E7456"} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/add")}>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            >
               <Box className="w-20 h-20 bg-[#4E7456] items-center justify-center rounded-full">
                 <Feather name="plus" size={64} color="#FCFFE0" />
               </Box>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/chats")}>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/chats");
+                setCurrentPage("chats");
+              }}
+              className={
+                currentPage === "chats"
+                  ? "bg-[#FCFFE0] rounded-full p-2"
+                  : "p-2"
+              }
+            >
+              <Box className="absolute top-1 z-10 right-1 w-4 h-4 bg-red-600 rounded-full" />
               <Feather name="message-circle" size={30} color={"#4E7456"} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/profile")}>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/profile");
+                setCurrentPage("profile");
+              }}
+              className={
+                currentPage === "profile"
+                  ? "bg-[#FCFFE0] rounded-full p-2"
+                  : "p-2"
+              }
+            >
               <Feather name="user" size={30} color={"#4E7456"} />
             </TouchableOpacity>
           </HStack>
+          <AddModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+          />
         </Box>
       )}
     >
-      <Tabs.Screen name="home" options={{ headerShown: false }} />
-      <Tabs.Screen name="posts" options={{ headerShown: false }} />
-      <Tabs.Screen name="add" options={{ headerShown: false }} />
-      <Tabs.Screen name="chats" options={{ headerShown: false }} />
-      <Tabs.Screen name="profile" options={{ headerShown: false }} />
+      <Tabs.Screen name="home" />
+      <Tabs.Screen name="posts" />
+      <Tabs.Screen name="add" />
+      <Tabs.Screen name="chats" />
+      <Tabs.Screen name="profile" />
     </Tabs>
   );
 }
