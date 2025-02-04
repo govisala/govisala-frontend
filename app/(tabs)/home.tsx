@@ -46,7 +46,7 @@ const Home = () => {
   });
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-[#FCFFE0] w-full h-full">
       <Box>
         <Center>
           <HStack className="flex-col">

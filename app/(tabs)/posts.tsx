@@ -97,7 +97,7 @@ const Posts = () => {
   });
 
   return (
-    <SafeAreaView className="h-full mx-2">
+    <SafeAreaView className="bg-[#FCFFE0] w-full h-full">
       <Box>
         <Center className="flex items-center justify-center h-full">
           <Text className="text-center font-p600 text-3xl text-[#354040]">

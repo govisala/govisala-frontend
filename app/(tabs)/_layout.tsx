@@ -1,14 +1,11 @@
 import { Box } from "@/components/ui/box";
 import { HStack } from "@/components/ui/hstack";
-import { Text } from "@/components/ui/text";
 import { Tabs } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { set } from "zod";
 import AddModal from "@/components/AddBtnModal";
 
 export default function TabLayout() {

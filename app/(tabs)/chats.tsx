@@ -43,7 +43,7 @@ const messages = [
 
 const chats = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-[#FCFFE0] w-full h-full">
       <Box>
         <Center className="flex items-center w-full px-2">
           <Text className="text-center font-p600 text-3xl mb-4 text-[#354040]">
@@ -62,7 +62,7 @@ const chats = () => {
                         source={{
                           uri: `https://ui-avatars.com/api/?name=${message.name}&background=random&size=50`,
                         }}
-                        style={{ width: 50, height: 50, borderRadius: 50 }}
+                        style={{ width: 52, height: 52, borderRadius: 50 }}
                       />
                     </Box>
                     <Box>
