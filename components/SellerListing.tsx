@@ -44,6 +44,16 @@ function buyerReq() {
         <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
           <InputField
             type="text"
+            placeholder="Unit Price"
+            value={UnitPrice}
+            onChangeText={(text) => setUnitPrice(text)}
+            className="font-p400"
+          />
+        </Input>
+
+        <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
+          <InputField
+            type="text"
             placeholder="Quality Grade"
             value={Quality}
             onChangeText={(text) => setQuality(text)}
@@ -74,51 +84,26 @@ function buyerReq() {
         <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
           <InputField
             type="text"
-            placeholder="Item Name"
-            value={ItemName}
-            onChangeText={(text) => setitemName(text)}
+            placeholder="Effective Date"
+            value={EffectiveDate}
+            onChangeText={(text) => setEffectiveDate(text)}
             className="font-p400"
           />
         </Input>
 
-        <text>Bid Limit</text>
-        <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16 w-[4" size={"xl"}>
+        <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
           <InputField
             type="text"
-            placeholder="From"
-            value={BidFrom}
-            onChangeText={(text) => setBidFrom(text)}
-            className="font-p400"
-          />
-        </Input>
-
-        <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16 w-[4" size={"xl"}>
-          <InputField
-            type="text"
-            placeholder="To"
-            value={BidTo}
-            onChangeText={(text) => setBidTo(text)}
-            className="font-p400"
-          />
-        </Input>
-
-        <Input
-          className="bg-[#FCFFE0] rounded-full mt-8 h-16 w-[4"
-          size={"xl"}
-          flex-1
-        >
-          <InputField
-            type="text"
-            placeholder="Additinal notes"
-            value={Addi}
-            onChangeText={(text) => setAddi(text)}
+            placeholder="Delivery or Pickup"
+            value={DeliveryPickup}
+            onChangeText={(text) => setDeliveryPickup(text)}
             className="font-p400"
           />
         </Input>
 
         <Button className="bg-[#4E7456] h-14 rounded-full">
           <ButtonText className="font-p500 text-[#FCFFE0] text-2xl">
-            Add Request
+            Add List
           </ButtonText>
         </Button>
       </center>
