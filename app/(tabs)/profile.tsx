@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Box } from "@/components/ui/box";
 import { Center } from "@/components/ui/center";
@@ -24,6 +24,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import StarRating from "react-native-star-rating-widget";
+import EditProfileModal from "@/components/EditProfileModal";
 
 const profile = {
   name: "Keels Matara - Maddawwatte",
@@ -41,6 +42,7 @@ const profile = {
 };
 
 const User = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <SafeAreaView className="bg-[#FCFFE0] w-full h-full">
       <Box className="absolute -top-96 self-center rounded-full w-[480px] h-[480px] bg-[#C0D85F]" />
@@ -49,13 +51,15 @@ const User = () => {
           <Text className="text-center font-p600 text-3xl mb-4 text-[#354040]">
             Buyer Profile
           </Text>
-          <Avatar size="2xl">
-            <AvatarFallbackText>{profile.name}</AvatarFallbackText>
-            <AvatarImage
+          <Avatar size="2xl" className="items-center justify-center">
+            <AvatarFallbackText className="font-p500 mt-4">
+              {profile.name}
+            </AvatarFallbackText>
+            {/* <AvatarImage
               source={{
                 uri: `https://ui-avatars.com/api/?name=${profile.name}&background=random&size=300`,
               }}
-            />
+            /> */}
             {profile.accountStatus === "verified" && (
               <MaterialIcons
                 name="verified"
@@ -94,7 +98,7 @@ const User = () => {
                       return (
                         <>
                           <AccordionTitleText className="font-p600 text-xl">
-                            My Deatails
+                            My Details
                           </AccordionTitleText>
                           {isExpanded ? (
                             <AntDesign name="up" size={16} color="black" />
@@ -160,7 +164,10 @@ const User = () => {
                         Created on {profile.accountCreated}
                       </Text>
                     </Box>
-                    <TouchableOpacity className="absolute bottom-0 right-0 flex-row items-center bg-[#C0D85F] rounded-lg p-2">
+                    <TouchableOpacity
+                      onPress={() => setModalVisible(true)}
+                      className="absolute bottom-0 right-0 flex-row items-center bg-[#C0D85F] rounded-lg p-2"
+                    >
                       <MaterialIcons name="edit" size={18} color="black" />
                       <Text className="ml-1 font-p500 text-md">
                         Edit Profile
@@ -173,6 +180,11 @@ const User = () => {
           </Box>
         </Center>
       </Box>
+      <EditProfileModal
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        profile={profile}
+      />
     </SafeAreaView>
   );
 };

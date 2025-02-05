@@ -1,0 +1,101 @@
+[
+  {
+    "reqId": "12k3nl123",
+    "name": "Onions",
+    "quantity": "100kg",
+    "location": "Hambantota",
+    "unitPrice": "100",
+    "totalPrice": "10000",
+    "quality": "A",
+    "requiredDate": "2025-09-30",
+    "description": "Required Fresh onions from Hambantota",
+    "deliveryType": "Doorstep Pickup",
+    "bids": [
+      {
+        "bidId": "12k3nl123",
+        "supplierId": "123",
+        "supplierName": "Supplier 1",
+        "unitPrice": "90",
+        "totalPrice": "9000",
+        "deliveryType": "Doorstep Pickup",
+        "ratings": "4.5",
+        "status": "Pending",
+        "address": "No 123, Hambantota",
+        "possibleDates": "2025-09-25 - 28"
+      },
+      {
+        "bidId": "12k3nl123",
+        "supplierId": "124",
+        "supplierName": "Supplier 2",
+        "unitPrice": "95",
+        "totalPrice": "9500",
+        "deliveryType": "Doorstep Pickup",
+        "ratings": "4.0",
+        "status": "Pending",
+        "address": "No 12, Main Road, Hambantota"
+      }
+    ]
+  },
+  {
+    "reqId": "akljnd213",
+    "name": "Potatoes",
+    "quantity": "100kg",
+    "location": "Colombo",
+    "unitPrice": "200",
+    "totalPrice": "20000",
+    "quality": "A",
+    "description": "Required Fresh potatoes from Colombo",
+    "deliveryType": "Delivery",
+    "bids": [
+      {
+        "bidId": "akljnd213",
+        "supplierId": "123",
+        "supplierName": "Supplier 1",
+        "unitPrice": "190",
+        "totalPrice": "19000",
+        "deliveryType": "Delivery",
+        "status": "Pending"
+      },
+      {
+        "bidId": "akljnd213",
+        "supplierId": "124",
+        "supplierName": "Supplier 2",
+        "unitPrice": "195",
+        "totalPrice": "19500",
+        "deliveryType": "Delivery",
+        "status": "Pending"
+      }
+    ]
+  },
+  {
+    "reqId": "saldkn2d2",
+    "name": "Carrots",
+    "quantity": "100kg",
+    "location": "Galle",
+    "unitPrice": "300",
+    "totalPrice": "30000",
+    "quality": "A",
+    "description": "Required Fresh carrots from Galle",
+    "deliveryType": "Pickup",
+    "bids": [
+      {
+        "bidId": "saldkn2d2",
+        "supplierId": "123",
+        "supplierName": "Supplier 1",
+        "unitPrice": "290",
+        "totalPrice": "29000",
+        "deliveryType": "Pickup",
+        "status": "Pending"
+      },
+      {
+        "bidId": "saldkn2d2",
+        "supplierId": "124",
+        "supplierName": "Supplier 2",
+        "unitPrice": "295",
+        "totalPrice": "29500",
+        "deliveryType": "Pickup",
+        "status": "Pending"
+      }
+    ]
+  }
+]

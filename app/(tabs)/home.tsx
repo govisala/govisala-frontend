@@ -46,14 +46,14 @@ const Home = () => {
   });
 
   return (
-    <SafeAreaView className="bg-[#FCFFE0] w-full h-full">
+    <SafeAreaView className="bg-[#FCFFE0] w-full h-[105%]">
       <Box>
         <Center>
           <HStack className="flex-col">
             <Text className="text-3xl font-p600 text-left text-[#354040] ml-4">
-              Welcome Buyer A,
+              Welcome A,
             </Text>
-            <Box className="h-20 flex flex-row items-center justify-between rounded-full mx-4">
+            <Box className="h-20 flex flex-row items-center rounded-full mx-4">
               <Input
                 variant="rounded"
                 size="lg"
@@ -89,7 +89,7 @@ const Home = () => {
                   renderItem={({ item }) => (
                     <ImageBackground
                       source={img1}
-                      className="flex flex-col w-64 h-64 mr-2 rounded-full"
+                      className="flex flex-col w-64 h-64 mr-2 rounded-full border border-outline-200"
                       imageStyle={{ borderRadius: 12 }}
                     >
                       <Box className="flex-[60%] bg-black opacity-40 rounded-t-xl"></Box>
@@ -123,7 +123,7 @@ const Home = () => {
                   renderItem={({ item }) => (
                     <ImageBackground
                       source={img1}
-                      className="flex flex-col w-64 h-64 mr-2 rounded-full"
+                      className="flex flex-col w-64 h-64 mr-2 rounded-full border border-outline-200"
                       imageStyle={{ borderRadius: 12 }}
                     >
                       <Box className="flex-[60%] bg-black opacity-40 rounded-t-xl"></Box>
@@ -157,7 +157,7 @@ const Home = () => {
                   renderItem={({ item }) => (
                     <ImageBackground
                       source={img1}
-                      className="flex flex-col w-64 h-64 mr-2 rounded-full"
+                      className="flex flex-col w-64 h-64 mr-2 rounded-full border border-outline-200"
                       imageStyle={{ borderRadius: 12 }}
                     >
                       <Box className="flex-[60%] bg-black opacity-40 rounded-t-xl"></Box>
@@ -180,6 +180,7 @@ const Home = () => {
                   className="w-full h-64 mt-2"
                 />
               </Box>
+              <Box className="h-16 mb-16" />
             </ScrollView>
           </HStack>
         </Center>
