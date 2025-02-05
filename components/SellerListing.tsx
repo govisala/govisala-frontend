@@ -10,18 +10,17 @@ import { Input, InputField } from "@/components/ui/input";
 function buyerReq() {
   const [ItemName, setitemName] = useState("");
   const [Quantity, setQuantity] = useState("");
+  const [UnitPrice, setUnitPrice] = useState("");
   const [Quality, setQuality] = useState("");
   const [Location, setLocation] = useState("");
   const [Area, setArea] = useState("");
-  const [RequiredDate, setReqiredDate] = useState("");
-  const [BidFrom, setBidFrom] = useState("");
-  const [BidTo, setBidTo] = useState("");
-  const [Addi, setAddi] = useState("");
+  const [EffectiveDate, setEffectiveDate] = useState("");
+  const [DeliveryPickup, setDeliveryPickup] = useState("");
 
   return (
     <Box className="bg-[#C0D85F] h-full rounded-t-[40px] px-4">
       <center>
-        <Text className="text-4xl font-p600 mt-8 p-1">Buyer Request</Text>
+        <Text className="text-4xl font-p600 mt-8 p-1">Seller Listing</Text>
         <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
           <InputField
             type="text"
