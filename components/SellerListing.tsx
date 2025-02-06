@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputField } from "@/components/ui/input";
 import { Pressable } from "react-native";
+import Feather from "@expo/vector-icons/Feather";
 
 function SellerListing() {
   const [ItemName, setitemName] = useState("");
@@ -22,7 +23,9 @@ function SellerListing() {
       <Box className="bg-[#C0D85F] h-full rounded-t-[40px] px-4">
         <Center>
           <Text className="text-4xl font-p600 mt-8 p-1">Seller Listing</Text>
-          <Pressable className="w-30 h-30 rounded-full bg-[#D9D9D9] justify-center items-center"></Pressable>
+          <Pressable className="w-30 h-30 rounded-full bg-[#D9D9D9] justify-center items-center">
+            <Feather name="plus" size={32} color="#FCFFE0" />
+          </Pressable>
           <Input className="bg-[#FCFFE0] rounded-full mt-8 h-16" size={"xl"}>
             <InputField
               type="text"
