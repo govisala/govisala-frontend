@@ -5,6 +5,9 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
+  View,
+  Image,
+  Platform,
 } from "react-native";
 import { Box } from "./ui/box";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,6 +16,7 @@ import { Center } from "./ui/center";
 import { BlurView } from "expo-blur";
 import { InputField, Input } from "./ui/input";
 import { Button, ButtonText } from "./ui/button";
+import * as ImagePicker from "expo-image-picker";
 
 interface AddModalProps {
   modalVisible: boolean;
@@ -32,6 +36,41 @@ const AddModal: React.FC<AddModalProps> = ({
   const [BidFrom, setBidFrom] = useState("");
   const [BidTo, setBidTo] = useState("");
   const [Addi, setAddi] = useState("");
+  const [images, setImages] = useState<Array<string>>([]);
+
+  const pickImage = async () => {
+    // Request permissions first
+    if (Platform.OS !== "web") {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+        return;
+      }
+    }
+
+    // Launch image picker
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.8,
+      allowsMultipleSelection: true,
+      selectionLimit: 5,
+    });
+
+    if (!result.canceled) {
+      // For multiple image selection
+      const selectedImages = result.assets.map((asset) => asset.uri);
+      setImages([...images, ...selectedImages].slice(0, 5)); // Keep max 5 images
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+  };
 
   return (
     <Modal
@@ -131,9 +170,9 @@ const AddModal: React.FC<AddModalProps> = ({
                 >
                   <InputField
                     type="text"
-                    placeholder="Item Name"
-                    value={ItemName}
-                    onChangeText={(text) => setitemName(text)}
+                    placeholder="Required Date"
+                    value={RequiredDate}
+                    onChangeText={(text) => setReqiredDate(text)}
                     className="font-p400"
                   />
                 </Input>
@@ -170,14 +209,75 @@ const AddModal: React.FC<AddModalProps> = ({
                   </Input>
                 </Box>
 
+                {/* Image Upload Section */}
+                <Box className="flex flex-row w-full mt-6">
+                  <Text className="font-p500 text-left text-2xl text-[#354040]">
+                    Attach Images
+                  </Text>
+                </Box>
+
+                {/* Image Preview */}
+                <Box className="flex flex-row flex-wrap mt-2 w-full justify-start">
+                  {images.map((image, index) => (
+                    <Box key={index} className="relative m-1">
+                      <Image
+                        source={{ uri: image }}
+                        style={{ width: 80, height: 80, borderRadius: 8 }}
+                      />
+                      <TouchableOpacity
+                        onPress={() => removeImage(index)}
+                        style={{
+                          position: "absolute",
+                          right: -5,
+                          top: -5,
+                          backgroundColor: "#4E7456",
+                          borderRadius: 12,
+                          width: 24,
+                          height: 24,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AntDesign name="close" size={16} color="#FCFFE0" />
+                      </TouchableOpacity>
+                    </Box>
+                  ))}
+
+                  {images.length < 5 && (
+                    <TouchableOpacity
+                      onPress={pickImage}
+                      style={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: 8,
+                        backgroundColor: "#FCFFE0",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        margin: 4,
+                        borderWidth: 1,
+                        borderColor: "#4E7456",
+                        borderStyle: "dashed",
+                      }}
+                    >
+                      <AntDesign name="plus" size={24} color="#4E7456" />
+                    </TouchableOpacity>
+                  )}
+                </Box>
+
+                {/* Image Count */}
+                {images.length > 0 && (
+                  <Text className="text-right w-full text-sm text-[#354040] mt-1">
+                    {images.length}/5 images
+                  </Text>
+                )}
+
                 <Input
                   className="bg-[#FCFFE0] rounded-full mt-8 h-16"
                   size={"xl"}
-                  flex-1
                 >
                   <InputField
                     type="text"
-                    placeholder="Additinal notes"
+                    placeholder="Additional notes"
                     value={Addi}
                     onChangeText={(text) => setAddi(text)}
                     className="font-p400"

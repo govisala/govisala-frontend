@@ -24,7 +24,7 @@ const useAuth = () => {
   useEffect(() => {
     // Auth Check Goes Here
     setTimeout(() => {
-      const loggedInUser = { id: 1 }; // Change to `{ id: 1 }` for testing login state
+      const loggedInUser = null; // Change to `{ id: 1 }` for testing login state
       setUser(loggedInUser);
       setLoading(false);
     }, 1000);
@@ -48,7 +48,7 @@ function Layout() {
       if (user) {
         router.replace("/home"); // Redirect to tabs when logged in
       } else {
-        router.replace("/login"); // Redirect to login if not logged in
+        router.replace("/(auth)"); // Redirect to login if not logged in
       }
     }
     if (loaded || error) {

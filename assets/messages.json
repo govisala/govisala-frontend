@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "message": "Hello, Can you know about this order?",
+    "time": "10:00 AM",
+    "orderid": "ORD-1234",
+    "orderName": "Onion 100kg",
+    "unread": 2
+  },
+  {
+    "id": 2,
+    "name": "Peter Parker",
+    "message": "Is it okay to door step delivery?",
+    "time": "11:00 AM",
+    "orderid": "ORD-1235",
+    "orderName": "Potato 100kg",
+    "unread": 1
+  },
+  {
+    "id": 3,
+    "name": "Tony Stark",
+    "message": "I have some queries about the product",
+    "time": "12:00 PM",
+    "orderid": "ORD-1236",
+    "orderName": "Tomato 100kg",
+    "unread": 0
+  },
+  {
+    "id": 4,
+    "name": "Bruce Wayne",
+    "message": "Can you help me with this issue?",
+    "time": "1:00 PM",
+    "orderid": "ORD-1237",
+    "orderName": "Carrot 100kg",
+    "unread": 0
+  }
+]

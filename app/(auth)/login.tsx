@@ -10,8 +10,8 @@ import { Input, InputField } from "@/components/ui/input";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { z } from "zod";
-import { Alert, AlertIcon, AlertText } from "@/components/ui/alert";
+import { z, ZodError } from "zod";
+import { Alert, AlertText } from "@/components/ui/alert";
 import { Pressable } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -26,31 +26,46 @@ const User = z.object({
 });
 
 function Login() {
+  const HOST = "10.48.36.23";
   const [email, setEmail] = useState("");
   const [passWd, setpassWd] = useState("");
+  const [error, setError] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
   const router = useRouter();
 
   const handleSubmit = () => {
     try {
       let user = User.parse({ user_mail: email, user_pwd: passWd });
       axios
-        .post("http://localhost:3210/auth/login", user)
+        .post("http://" + HOST + ":3210/auth/login", user)
         .then(async (res) => {
           if (res.status == 200) {
             try {
               const jsonValue = JSON.stringify(res.data.userData);
               await AsyncStorage.setItem("userData", jsonValue);
+              router.push("/(tabs)/home");
             } catch (e: any) {
               console.log(e);
             }
-            router.push("/(tabs)/home");
           }
         })
         .catch((err: any) => {
-          console.log(err.message);
+          console.warn(err.response.data.message);
+          setError(err.response.data.message);
+          setShowAlert(true);
+          setTimeout(() => {
+            setShowAlert(false);
+            setError("");
+          }, 5000);
         });
     } catch (error: any) {
-      console.log(error);
+      console.log(error.issues[0].message);
+      setError(error.issues[0].message);
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+        setError("");
+      }, 5000);
     }
   };
 
@@ -119,6 +134,23 @@ function Login() {
               <Text className="font-p500">Sign Up</Text>
             </Pressable>
           </Center>
+          {showAlert && (
+            <Alert
+              className="rounded-full mt-16"
+              action="error"
+              variant="solid"
+            >
+              {/* <AlertIcon as={InfoIcon} /> */}
+              <Ionicons
+                name="information-circle-outline"
+                size={28}
+                color="#a53333"
+              />
+              <AlertText className="font-p400" size="xl">
+                {error}
+              </AlertText>
+            </Alert>
+          )}
         </VStack>
       </Box>
     </SafeAreaView>

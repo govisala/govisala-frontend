@@ -9,37 +9,9 @@ import React from "react";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Center } from "@/components/ui/center";
+import { router } from "expo-router";
 
-const messages = [
-  {
-    id: 1,
-    name: "John Doe",
-    message: "Hello, Can you know about this order?",
-    time: "10:00 AM",
-    unread: 2,
-  },
-  {
-    id: 2,
-    name: "Peter Parker",
-    message: "Is it okay to door step delivery?",
-    time: "11:00 AM",
-    unread: 1,
-  },
-  {
-    id: 3,
-    name: "Tony Stark",
-    message: "I have some queries about the product",
-    time: "12:00 PM",
-    unread: 0,
-  },
-  {
-    id: 4,
-    name: "Bruce Wayne",
-    message: "Can you help me with this issue?",
-    time: "1:00 PM",
-    unread: 0,
-  },
-];
+import messages from "@/assets/messages.json";
 
 const chats = () => {
   return (
@@ -51,7 +23,10 @@ const chats = () => {
           </Text>
           <ScrollView>
             {messages.map((message) => (
-              <TouchableOpacity key={message.id}>
+              <TouchableOpacity
+                key={message.id}
+                onPress={() => router.push(`/(tabs)/chats/${message.id}`)}
+              >
                 <Box
                   key={message.id}
                   className="flex flex-row items-center justify-between border-b border-gray-200 mb-2 pb-2"
@@ -66,6 +41,12 @@ const chats = () => {
                       />
                     </Box>
                     <Box>
+                      <Box className="border-b border-gray-200 pb-2">
+                        <Text className="font-p600">
+                          Chatting about: {message.orderName}
+                        </Text>
+                        <Text className="text-gray-400">{message.orderid}</Text>
+                      </Box>
                       <Text className="font-p600">{message.name}</Text>
                       <Text
                         className={
