@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import { Box } from "@/components/ui/box";
 import { Center } from "@/components/ui/center";
 import {
@@ -21,10 +22,12 @@ import {
 } from "@/components/ui/accordion";
 import { Divider } from "@/components/ui/divider";
 import AntDesign from "@expo/vector-icons/AntDesign";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import StarRating from "react-native-star-rating-widget";
 import EditProfileModal from "@/components/EditProfileModal";
+import { Button, ButtonText } from "@/components/ui/button";
+import { router } from "expo-router";
 
 const profile = {
   name: "Keels Matara - Maddawwatte",
@@ -42,12 +45,28 @@ const profile = {
 };
 
 const User = () => {
+  const logoutHandle = async () => {
+    await AsyncStorage.removeItem("userData").then(() => {
+      console.log("User Data Removed");
+      router.replace("/(auth)");
+    });
+  };
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <SafeAreaView className="bg-[#FCFFE0] w-full h-full">
       <Box className="absolute -top-96 self-center rounded-full w-[480px] h-[480px] bg-[#C0D85F]" />
       <Box>
         <Center className="flex items-center w-full px-4">
+          <Button
+            onPress={logoutHandle}
+            size="sm"
+            className="bg-[#4E7456] rounded-full w-24 items-center justify-center absolute top-0 right-2"
+          >
+            <ButtonText className="font-p500 ml-2 text-md text-white">
+              Logout
+            </ButtonText>
+            <MaterialIcons name="logout" size={18} color="white" />
+          </Button>
           <Text className="text-center font-p600 text-3xl mb-4 text-[#354040]">
             Buyer Profile
           </Text>

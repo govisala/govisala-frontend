@@ -34,7 +34,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 
 function Register() {
-  const HOST = "10.48.36.23";
   const [isInvalid, setIsInvalid] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -176,7 +175,7 @@ function Register() {
 
       // Submit to server using axios
       const response = await axios.post(
-        "http://" + HOST + ":3210/auth/register",
+        process.env.EXPO_PUBLIC_API_URL + "/auth/register",
         formData,
         {
           headers: {

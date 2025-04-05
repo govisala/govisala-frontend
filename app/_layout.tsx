@@ -14,18 +14,24 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 SplashScreen.preventAutoHideAsync();
 
 const useAuth = () => {
-  const [user, setUser] = useState<{ id: number } | null>(null);
+  const [user, setUser] = useState<{ id: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Auth Check Goes Here
-    setTimeout(() => {
-      const loggedInUser = null; // Change to `{ id: 1 }` for testing login state
-      setUser(loggedInUser);
+    setTimeout(async () => {
+      await AsyncStorage.getItem("userData").then((value) => {
+        if (value) {
+          console.log("User Data: ", JSON.parse(value));
+
+          // setUser(JSON.parse(value));
+        }
+      });
       setLoading(false);
     }, 1000);
   }, []);

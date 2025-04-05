@@ -32,8 +32,9 @@ function OTP() {
   const [error, setError] = useState("");
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
-  const handleClose = () => {
+  const handleClose = async () => {
     setShowAlertDialog(false);
+    await AsyncStorage.removeItem("userId");
     router.push("/(auth)/login");
   };
 
@@ -44,14 +45,13 @@ function OTP() {
     const getUserId = async () => {
       try {
         const userId = await AsyncStorage.getItem("userId");
-        setUserId(userId);
+        setUserId(userId || "");
       } catch (error) {
         console.error("Error retrieving user ID:", error);
       }
     };
     getUserId();
   }, []);
-  const HOST = "10.48.36.23";
   const [otpCode, setOtpCode] = useState("");
 
   const handleSubmit = () => {
@@ -59,7 +59,7 @@ function OTP() {
     console.log(userId);
 
     axios
-      .post("http://" + HOST + ":3210/auth/otp-verify", {
+      .post(process.env.EXPO_PUBLIC_API_URL + "/auth/otp-verify", {
         otp: otpCode,
         user_id: userId,
       })

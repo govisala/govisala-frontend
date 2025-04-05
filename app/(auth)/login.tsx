@@ -2,7 +2,7 @@ import { Box } from "@/components/ui/box";
 import { Center } from "@/components/ui/center";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import LottieView from "lottie-react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,26 +26,33 @@ const User = z.object({
 });
 
 function Login() {
-  const HOST = "10.48.36.23";
   const [email, setEmail] = useState("");
   const [passWd, setpassWd] = useState("");
   const [error, setError] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = () => {
+    setLoading(true);
+    setError("");
+    setShowAlert(false);
     try {
       let user = User.parse({ user_mail: email, user_pwd: passWd });
       axios
-        .post("http://" + HOST + ":3210/auth/login", user)
+        .post(process.env.EXPO_PUBLIC_API_URL + "/auth/login", user)
         .then(async (res) => {
           if (res.status == 200) {
             try {
               const jsonValue = JSON.stringify(res.data.userData);
               await AsyncStorage.setItem("userData", jsonValue);
+              setLoading(false);
               router.push("/(tabs)/home");
             } catch (e: any) {
-              console.log(e);
+              console.log(e.response.data.message);
+              setError(e.response.data.message);
+              setShowAlert(true);
+              setLoading(false);
             }
           }
         })
@@ -53,6 +60,7 @@ function Login() {
           console.warn(err.response.data.message);
           setError(err.response.data.message);
           setShowAlert(true);
+          setLoading(false);
           setTimeout(() => {
             setShowAlert(false);
             setError("");
@@ -62,6 +70,7 @@ function Login() {
       console.log(error.issues[0].message);
       setError(error.issues[0].message);
       setShowAlert(true);
+      setLoading(false);
       setTimeout(() => {
         setShowAlert(false);
         setError("");
@@ -113,9 +122,13 @@ function Login() {
               size={"xl"}
               onPress={handleSubmit}
             >
-              <ButtonText className="color-[#FCFFE0] font-p600 text-2xl">
-                Sign In
-              </ButtonText>
+              {loading ? (
+                <ButtonSpinner size="large" color="black" />
+              ) : (
+                <ButtonText className="color-[#FCFFE0] font-p600 text-2xl">
+                  Sign In
+                </ButtonText>
+              )}
             </Button>
             <Pressable onPress={() => router.push("/(tabs)/home")}>
               <Text className="text-right mt-4 font-p500 text-[#4E7456]">
@@ -140,7 +153,6 @@ function Login() {
               action="error"
               variant="solid"
             >
-              {/* <AlertIcon as={InfoIcon} /> */}
               <Ionicons
                 name="information-circle-outline"
                 size={28}
