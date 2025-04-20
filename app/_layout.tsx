@@ -26,10 +26,9 @@ const useAuth = () => {
     // Auth Check Goes Here
     setTimeout(async () => {
       await AsyncStorage.getItem("userData").then((value) => {
-        if (value) {
-          console.log("User Data: ", JSON.parse(value));
-
-          // setUser(JSON.parse(value));
+        let temp_user = value ? JSON.parse(value) : null;
+        if (temp_user) {
+          setUser(temp_user.user_id);
         }
       });
       setLoading(false);

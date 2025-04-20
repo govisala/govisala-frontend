@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,9 @@ import {
   View,
   Image,
   Platform,
+  ActivityIndicator,
+  Alert as Alt,
+  KeyboardAvoidingView,
 } from "react-native";
 import { Box } from "./ui/box";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,16 +20,109 @@ import { BlurView } from "expo-blur";
 import { InputField, Input } from "./ui/input";
 import { Button, ButtonText } from "./ui/button";
 import * as ImagePicker from "expo-image-picker";
+import { Alert, AlertText, AlertIcon } from "@/components/ui/alert";
 
-interface AddModalProps {
+import axios from "axios";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { UserDataContext } from "@/components/context/UserDataContext";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
+interface BuyerRequestFormData {
+  ItemName: string;
+  Quantity: string;
+  Quality: string;
+  Location: string;
+  Area: string;
+  RequiredDate: string;
+  BidFrom: string;
+  BidTo: string;
+  Addi: string;
+  UserId: string;
+}
+
+// Function to submit the buyer request form
+const submitBuyerRequest = async (
+  formData: BuyerRequestFormData,
+  images: string[]
+) => {
+  try {
+    // Create a FormData object for multipart/form-data submission (for images)
+    const data = new FormData();
+
+    // Add all form fields to FormData
+    data.append("ItemName", formData.ItemName);
+    data.append("Quantity", formData.Quantity);
+    data.append("Quality", formData.Quality);
+    data.append("Location", formData.Location);
+    data.append("Area", formData.Area);
+    data.append("RequiredDate", formData.RequiredDate);
+    data.append("BidFrom", formData.BidFrom);
+    data.append("BidTo", formData.BidTo);
+    data.append("Addi", formData.Addi);
+    data.append("UserId", formData.UserId);
+
+    // Add images to FormData
+    images.forEach((imageUri, index) => {
+      // Extract filename from URI
+      const filename = imageUri.split("/").pop() || `image${index}.jpg`;
+
+      // Get file extension
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : "image/jpeg";
+
+      // Create a Blob from the image URI
+      const blob = {
+        uri: imageUri,
+        type,
+        name: filename,
+      } as unknown as Blob;
+
+      // Append image to form data
+      data.append("buyerReqImages", blob, filename);
+    });
+
+    // Set up axios instance with headers for multipart/form-data
+    const API_URL = process.env.EXPO_PUBLIC_API_URL + "/buyer"; // Replace with your API URL
+
+    // Include authorization header if using auth
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/post-buyer-request`,
+      data,
+      config
+    );
+
+    // Return successful response
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error: any) {
+    console.error("Error submitting buyer request:", error);
+
+    // Return error information
+    return {
+      success: false,
+      error: error.response?.data?.message || error.message,
+    };
+  }
+};
+
+interface AddModalBuyerProps {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
 }
 
-const AddModal: React.FC<AddModalProps> = ({
+const AddModalBuyer: React.FC<AddModalBuyerProps> = ({
   modalVisible,
   setModalVisible,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [ItemName, setitemName] = useState("");
   const [Quantity, setQuantity] = useState("");
   const [Quality, setQuality] = useState("");
@@ -37,6 +133,9 @@ const AddModal: React.FC<AddModalProps> = ({
   const [BidTo, setBidTo] = useState("");
   const [Addi, setAddi] = useState("");
   const [images, setImages] = useState<Array<string>>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [errorVisible, setErrorVisible] = useState<boolean>(false);
+  const { userData } = useContext(UserDataContext);
 
   const pickImage = async () => {
     // Request permissions first
@@ -51,9 +150,7 @@ const AddModal: React.FC<AddModalProps> = ({
 
     // Launch image picker
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
+      mediaTypes: ["images"],
       quality: 0.8,
       allowsMultipleSelection: true,
       selectionLimit: 5,
@@ -70,6 +167,108 @@ const AddModal: React.FC<AddModalProps> = ({
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
+  };
+
+  // Form validation function
+  const validateForm = () => {
+    if (!ItemName.trim()) return "Item name is required";
+    if (!Quantity.trim()) return "Quantity is required";
+    if (!Location.trim()) return "Location is required";
+    if (!RequiredDate.trim()) return "Required date is required";
+    if (!BidFrom.trim() || !BidTo.trim()) return "Bid range is required";
+
+    const bidFromNum = parseFloat(BidFrom);
+    const bidToNum = parseFloat(BidTo);
+
+    if (isNaN(bidFromNum) || isNaN(bidToNum))
+      return "Bid values must be numbers";
+
+    if (bidFromNum >= bidToNum)
+      return "Bid to value must be greater than bid from value";
+
+    return null; // No validation errors
+  };
+
+  // Form submission handler
+  const handleSubmit = async () => {
+    // Validate form
+    const validationError = validateForm();
+    if (validationError) {
+      setError("Error: " + validationError);
+      setErrorVisible(true);
+      setTimeout(() => {
+        setErrorVisible(false);
+      }, 3000);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Prepare form data
+    const formData = {
+      ItemName,
+      Quantity,
+      Quality,
+      Location,
+      Area,
+      RequiredDate,
+      BidFrom,
+      BidTo,
+      Addi,
+      UserId: userData.user_id,
+    };
+
+    try {
+      const result = await submitBuyerRequest(formData, images);
+
+      if (result.success) {
+        // TODO: Add success alert
+        Alt.alert(
+          "Success",
+          "Your buyer request has been submitted successfully!",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                // Reset form and close modal
+                resetForm();
+                setModalVisible(false);
+                // Don't refresh posts here to avoid updating data in BuyerPostsContext
+              },
+            },
+          ]
+        );
+      } else {
+        setError("Error: " + result.error || "Failed to submit your request");
+        setErrorVisible(true);
+        setTimeout(() => {
+          setErrorVisible(false);
+        }, 3000);
+      }
+    } catch (error) {
+      setError("Error: Something went wrong. Please try again later.");
+      setErrorVisible(true);
+      setTimeout(() => {
+        setErrorVisible(false);
+      }, 3000);
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Function to reset form fields
+  const resetForm = () => {
+    setitemName("");
+    setQuantity("");
+    setQuality("");
+    setLocation("");
+    setArea("");
+    setReqiredDate("");
+    setBidFrom("");
+    setBidTo("");
+    setAddi("");
+    setImages([]);
   };
 
   return (
@@ -96,8 +295,14 @@ const AddModal: React.FC<AddModalProps> = ({
               Add Buyer Request
             </Text>
           </Center>
-          <ScrollView>
-            <Box className="flex bg-[#C0D85F] h-full rounded-t-[40px] px-4">
+          <ScrollView
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingBottom: 120,
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            <KeyboardAvoidingView className="flex bg-[#C0D85F] h-full rounded-t-[40px] px-4">
               <Center>
                 <Input
                   className="bg-[#FCFFE0] rounded-full mt-8 h-16"
@@ -118,7 +323,7 @@ const AddModal: React.FC<AddModalProps> = ({
                 >
                   <InputField
                     type="text"
-                    placeholder="Quantity"
+                    placeholder="Quantity (in kg)"
                     value={Quantity}
                     onChangeText={(text) => setQuantity(text)}
                     className="font-p400"
@@ -131,7 +336,7 @@ const AddModal: React.FC<AddModalProps> = ({
                 >
                   <InputField
                     type="text"
-                    placeholder="Quality Grade"
+                    placeholder="Quality Grade (e.g. A, B, C)"
                     value={Quality}
                     onChangeText={(text) => setQuality(text)}
                     className="font-p400"
@@ -144,7 +349,7 @@ const AddModal: React.FC<AddModalProps> = ({
                 >
                   <InputField
                     type="text"
-                    placeholder="Location"
+                    placeholder="Nearest Town/City"
                     value={Location}
                     onChangeText={(text) => setLocation(text)}
                     className="font-p400"
@@ -157,25 +362,29 @@ const AddModal: React.FC<AddModalProps> = ({
                 >
                   <InputField
                     type="text"
-                    placeholder="Area"
+                    placeholder="District"
                     value={Area}
                     onChangeText={(text) => setArea(text)}
                     className="font-p400"
                   />
                 </Input>
 
-                <Input
-                  className="bg-[#FCFFE0] rounded-full mt-8 h-16"
-                  size={"xl"}
-                >
-                  <InputField
-                    type="text"
-                    placeholder="Required Date"
-                    value={RequiredDate}
-                    onChangeText={(text) => setReqiredDate(text)}
-                    className="font-p400"
-                  />
-                </Input>
+                <Box className="flex flex-col w-full mt-4">
+                  <Text className="font-p500 text-left text-2xl text-[#354040] mb-2">
+                    Required Date
+                  </Text>
+                  <Box className="bg-[#FCFFE0] rounded-full p-3 items-center justify-center">
+                    <DateTimePicker
+                      value={RequiredDate ? new Date(RequiredDate) : new Date()}
+                      mode="date"
+                      onChange={(event, date) => {
+                        if (date) {
+                          setReqiredDate(date.toISOString().split("T")[0]);
+                        }
+                      }}
+                    />
+                  </Box>
+                </Box>
 
                 <Box className="flex flex-row w-full mt-5">
                   <Text className="font-p500 text-left text-2xl text-[#354040]">
@@ -284,13 +493,38 @@ const AddModal: React.FC<AddModalProps> = ({
                   />
                 </Input>
 
-                <Button className="bg-[#4E7456] h-14 rounded-full mt-10 mb-16">
-                  <ButtonText className="font-p500 text-[#FCFFE0] text-2xl">
-                    Add Request
-                  </ButtonText>
+                {errorVisible && (
+                  <Alert
+                    className="rounded-full mt-4"
+                    action="error"
+                    variant="solid"
+                  >
+                    <Ionicons
+                      name="information-circle-outline"
+                      size={28}
+                      color="#a53333"
+                    />
+                    <AlertText className="font-p400" size="xl">
+                      {error}
+                    </AlertText>
+                  </Alert>
+                )}
+
+                <Button
+                  className="bg-[#4E7456] h-14 rounded-full mt-10"
+                  onPress={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <ActivityIndicator color="#FCFFE0" size="small" />
+                  ) : (
+                    <ButtonText className="font-p500 text-[#FCFFE0] text-2xl">
+                      Add Request
+                    </ButtonText>
+                  )}
                 </Button>
               </Center>
-            </Box>
+            </KeyboardAvoidingView>
             <Box className="h-24" />
           </ScrollView>
         </Box>
@@ -299,4 +533,4 @@ const AddModal: React.FC<AddModalProps> = ({
   );
 };
 
-export default AddModal;
+export default AddModalBuyer;

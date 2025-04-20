@@ -56,8 +56,6 @@ function OTP() {
 
   const handleSubmit = () => {
     // Handle OTP submission logic here
-    console.log(userId);
-
     axios
       .post(process.env.EXPO_PUBLIC_API_URL + "/auth/otp-verify", {
         otp: otpCode,

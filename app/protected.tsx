@@ -3,7 +3,7 @@ import React from "react";
 
 // Mock authentication hook
 const useAuth = () => {
-  return { user: { id: 1 } }; // Replace with actual authentication logic
+  return { user: { id: 1 } };
 };
 
 export default function ProtectedLayout() {

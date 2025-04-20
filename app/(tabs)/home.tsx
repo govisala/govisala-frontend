@@ -1,11 +1,13 @@
 import { Box } from "@/components/ui/box";
 import { Center } from "@/components/ui/center";
 import { Text } from "@/components/ui/text";
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HStack } from "@/components/ui/hstack";
 import { InputField, Input } from "@/components/ui/input";
+
+import { UserDataContext } from "@/components/context/UserDataContext";
 
 import img1 from "@/assets/images/onions.jpg";
 
@@ -15,7 +17,9 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
+  Alert,
 } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 
 const items = [
   { name: "Item 1", price: "10000", location: "Hambantota" },
@@ -29,21 +33,20 @@ const items = [
 ];
 
 const Home = () => {
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("userData");
-      const value = jsonValue ? JSON.parse(jsonValue) : null;
-      if (value !== null) {
-        // console.log(value);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
+  const { userData } = useContext(UserDataContext);
   useEffect(() => {
-    getData();
-  });
+    setTimeout(async () => {
+      await AsyncStorage.getItem("userData").then((value) => {
+        let temp_user = value ? JSON.parse(value) : null;
+        if (temp_user.user_status !== "verified") {
+          Alert.alert(
+            "Oops!",
+            "Your account is not verified yet. Please wait until your account is being verified."
+          );
+        }
+      });
+    }, 1000);
+  }, []);
 
   return (
     <SafeAreaView className="bg-[#FCFFE0] w-full h-[105%]">
@@ -51,7 +54,7 @@ const Home = () => {
         <Center>
           <HStack className="flex-col">
             <Text className="text-3xl font-p600 text-left text-[#354040] ml-4">
-              Welcome A,
+              Welcome {userData.user_name}!
             </Text>
             <Box className="h-20 flex flex-row items-center rounded-full mx-4">
               <Input

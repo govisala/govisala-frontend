@@ -4,7 +4,7 @@ import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import LottieView from "lottie-react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputField } from "@/components/ui/input";
 import { useRouter } from "expo-router";
@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { z, ZodError } from "zod";
 import { Alert, AlertText } from "@/components/ui/alert";
 import { Pressable } from "react-native";
+import { UserDataContext } from "@/components/context/UserDataContext";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -46,6 +47,7 @@ function Login() {
             try {
               const jsonValue = JSON.stringify(res.data.userData);
               await AsyncStorage.setItem("userData", jsonValue);
+              console.log(jsonValue);
               setLoading(false);
               router.push("/(tabs)/home");
             } catch (e: any) {

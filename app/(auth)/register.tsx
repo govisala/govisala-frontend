@@ -53,7 +53,7 @@ function Register() {
 
   const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.5,
@@ -70,9 +70,7 @@ function Register() {
 
   const pickIdDocument = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
+      mediaTypes: ["images"],
       quality: 0.7,
     });
 
@@ -191,14 +189,11 @@ function Register() {
 
       console.log("Registration successful:", response.data);
       // Save user id on AsyncStorage
-      await AsyncStorage.setItem("userId", response.data.user_id);
+      await AsyncStorage.setItem("userId", `${response.data.user_id}`);
       // Navigate to login page or confirmation page
       router.push("/(auth)/otp");
     } catch (error: any) {
-      console.error(
-        "Registration error:",
-        error.response?.data || error.message
-      );
+      console.error("Registration error:", error.response.data);
       setFormError(
         error.response?.data?.message ||
           "Registration failed. Please try again."
@@ -298,33 +293,39 @@ function Register() {
             </Input>
 
             {/* User Role Dropdown */}
-            <Select onValueChange={(value) => setUserRole(value)}>
+
+            <Select
+              selectedValue={userRole}
+              onValueChange={(value) => setUserRole(value)}
+              className="font-p400"
+            >
               <SelectTrigger
                 variant="rounded"
                 size="lg"
-                className="mt-4 bg-[#FCFFE0] rounded-full w-full text-[#365e3e] h-16 justify-between pr-2"
+                className="mt-4 bg-[#FCFFE0] rounded-full font-p400 w-full text-[#365e3e] h-16 justify-between pr-2"
               >
                 <SelectInput
                   placeholder="Select role"
+                  placeholderTextColor="#365e3e"
                   className="bg-[#FCFFE0] rounded-full text-xl text-[#365e3e] font-p400"
                 />
                 <Ionicons name="chevron-down" size={24} color="#4E7456" />
               </SelectTrigger>
-              <SelectPortal>
+              <SelectPortal className="font-p400">
                 <SelectBackdrop />
-                <SelectContent className="pb-12 font-p400">
+                <SelectContent className="pb-12 text-xl font-p400">
                   <SelectDragIndicatorWrapper>
                     <SelectDragIndicator />
                   </SelectDragIndicatorWrapper>
                   <SelectItem
-                    className="font-p400"
                     label="Buyer"
                     value="buyer"
+                    className="font-p400"
                   />
                   <SelectItem
-                    className="font-p400"
                     label="Seller"
                     value="seller"
+                    className="font-p400"
                   />
                 </SelectContent>
               </SelectPortal>
@@ -427,13 +428,13 @@ function Register() {
             </View>
 
             {passwordError ? (
-              <Text className="text-red-500 text-sm mt-2 font-p400">
+              <Text className="text-red-500 text-md mt-2 font-p400">
                 {passwordError}
               </Text>
             ) : null}
 
             {formError ? (
-              <Text className="text-red-500 text-sm mt-2 font-p400">
+              <Text className="text-red-500 text-md mt-2 font-p400">
                 {formError}
               </Text>
             ) : null}

@@ -1,12 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
+import React, { useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@/components/ui/box";
 import { Center } from "@/components/ui/center";
 import {
   Avatar,
-  AvatarBadge,
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
@@ -16,11 +15,8 @@ import {
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
-  AccordionIcon,
   AccordionTitleText,
-  AccordionContentText,
 } from "@/components/ui/accordion";
-import { Divider } from "@/components/ui/divider";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -28,6 +24,8 @@ import StarRating from "react-native-star-rating-widget";
 import EditProfileModal from "@/components/EditProfileModal";
 import { Button, ButtonText } from "@/components/ui/button";
 import { router } from "expo-router";
+import { UserDataContext } from "@/components/context/UserDataContext";
+import axios from "axios";
 
 const profile = {
   name: "Keels Matara - Maddawwatte",
@@ -45,12 +43,23 @@ const profile = {
 };
 
 const User = () => {
+  const { userData, setUserData } = useContext(UserDataContext);
   const logoutHandle = async () => {
     await AsyncStorage.removeItem("userData").then(() => {
       console.log("User Data Removed");
       router.replace("/(auth)");
     });
   };
+
+  const reloadHandle = async () => {
+    axios
+      .get(process.env.EXPO_PUBLIC_API_URL + "/auth/user/" + userData.user_id)
+      .then(async (res) => {
+        setUserData(res.data);
+        await AsyncStorage.setItem("userData", JSON.stringify(res.data));
+      });
+  };
+
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <SafeAreaView className="bg-[#FCFFE0] w-full h-full">
@@ -67,39 +76,62 @@ const User = () => {
             </ButtonText>
             <MaterialIcons name="logout" size={18} color="white" />
           </Button>
+          <Button
+            onPress={reloadHandle}
+            size="sm"
+            className="bg-[#4E7456] rounded-full w-28 items-center justify-center absolute top-0 left-2"
+          >
+            <ButtonText className="font-p500 ml-2 text-md text-white">
+              Reload
+            </ButtonText>
+            <MaterialIcons name="autorenew" size={18} color="white" />
+          </Button>
           <Text className="text-center font-p600 text-3xl mb-4 text-[#354040]">
-            Buyer Profile
+            Profile
           </Text>
           <Avatar size="2xl" className="items-center justify-center">
             <AvatarFallbackText className="font-p500 mt-4">
-              {profile.name}
+              {userData?.user_name}
             </AvatarFallbackText>
-            {/* <AvatarImage
+            <AvatarImage
               source={{
-                uri: `https://ui-avatars.com/api/?name=${profile.name}&background=random&size=300`,
+                uri: process.env.EXPO_PUBLIC_API_URL + "/" + userData.user_img,
               }}
-            /> */}
-            {profile.accountStatus === "verified" && (
+            />
+            {userData.user_status === "verified" ? (
               <MaterialIcons
                 name="verified"
                 size={24}
                 color="#354040"
                 className="bg-[#FCFFE0] rounded-full p-[2px] absolute bottom-0 right-0"
               />
+            ) : (
+              <MaterialIcons
+                name="warning-amber"
+                size={24}
+                color="red"
+                onPress={() => {
+                  Alert.alert("Oops!", "Your account is not verified yet.");
+                }}
+                className="rounded-full p-[2px] absolute bottom-0 right-0"
+              />
             )}
           </Avatar>
           <Text className="font-p400 text-2xl text-[#354040] mt-4 text-center">
-            {profile.name}
+            {userData.user_name}
           </Text>
-          <StarRating
-            rating={profile.ratings}
-            onChange={(rating) => console.log(rating)}
-            color="black"
-            starSize={24}
-          />
-          <Text className="font-p400 text-sm text-[#354040]">
-            ({profile.ratings} ratings from {profile.reviews} reviews)
-          </Text>
+          {/* Here need to fix ratings */}
+          <>
+            <StarRating
+              rating={profile.ratings}
+              onChange={(rating) => console.log(rating)}
+              color="black"
+              starSize={24}
+            />
+            <Text className="font-p400 text-sm text-[#354040]">
+              ({profile.ratings} ratings from {profile.reviews} reviews)
+            </Text>
+          </>
 
           <Box className="w-full">
             <Accordion
@@ -138,13 +170,13 @@ const User = () => {
                         color="black"
                       />
                       <Text className="ml-2 font-p400 text-lg text-[#354040]">
-                        {profile.email}
+                        {userData.user_mail}
                       </Text>
                     </Box>
                     <Box className="flex-row items-center">
                       <MaterialIcons name="phone" size={18} color="black" />
                       <Text className="ml-2 font-p400 text-lg text-[#354040]">
-                        {profile.phone}
+                        {userData.user_tele}
                       </Text>
                     </Box>
                     <Box className="flex-row items-center">
@@ -154,13 +186,7 @@ const User = () => {
                         color="black"
                       />
                       <Text className="ml-2 font-p400 text-lg text-[#354040]">
-                        {profile.address}
-                      </Text>
-                    </Box>
-                    <Box className="flex-row items-center">
-                      <MaterialIcons name="123" size={18} color="black" />
-                      <Text className="ml-2 font-p400 text-lg text-[#354040]">
-                        {profile.buyerid}
+                        {userData.user_address + ", " + userData.user_district}
                       </Text>
                     </Box>
                     <Box className="flex-row items-center">
@@ -170,7 +196,7 @@ const User = () => {
                         color="black"
                       />
                       <Text className="ml-2 font-p400 text-lg text-[#354040]">
-                        {profile.accountType}
+                        {userData.user_role}
                       </Text>
                     </Box>
                     <Box className="flex-row items-center">
@@ -180,7 +206,7 @@ const User = () => {
                         color="black"
                       />
                       <Text className="ml-2 font-p400 text-lg text-[#354040]">
-                        Created on {profile.accountCreated}
+                        Created on {userData.user_createdAt.split("T")[0]}
                       </Text>
                     </Box>
                     <TouchableOpacity
