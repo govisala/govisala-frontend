@@ -217,7 +217,7 @@ const AddModalSeller: React.FC<AddModalSellerProps> = ({
         // TODO: Add success alert
         Alt.alert(
           "Success",
-          "Your Seller listing has been submitted successfully!",
+          "Your Seller listing has been submitted. Need to wait for approval.",
           [
             {
               text: "OK",
